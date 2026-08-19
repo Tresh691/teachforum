@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /PHPMailer/
+Sitemap: https://teachforum.ru/sitemap.xml

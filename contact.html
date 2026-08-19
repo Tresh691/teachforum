@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Свяжитесь с нами, если у вас есть вопросы или предложения.">
+    <title>Обратная связь — TeachForum</title>
+    <link rel="stylesheet" href="css/style2.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__inner">
+            <a href="index.php" class="logo">
+                <svg class="logo__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M12 14l9-5-9-5-9 5 9 5z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                TeachForum
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container" style="max-width: 600px; margin: 0 auto;">
+                <h1 class="section__title">Обратная связь</h1>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 24px;">
+                    Чтобы задать вопрос, заполните форму ниже.
+                Мы свяжемся с вами в ближайшее время.
+                </p>
+
+                <!-- Блок для сообщений об отправке -->
+                <div id="formMessage" style="display: none; margin-bottom: 16px;"></div>
+
+                <form id="contactForm" class="card" style="padding: 24px;">
+                    <!-- Скрытое поле-ловушка для ботов -->
+                    <div style="display: none;" aria-hidden="true">
+                        <input type="text" name="website" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name" class="form-label">Ваше имя *</label>
+                        <input type="text" id="name" name="name" class="form-input" required placeholder="Иван Иванов">
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email *</label>
+                        <input type="email" id="email" name="email" class="form-input" required placeholder="example@mail.ru">
+                    </div>
+                    <div class="form-group">
+                        <label for="message" class="form-label">Сообщение *</label>
+                        <textarea id="message" name="message" class="form-input" rows="5" required placeholder="Ваше сообщение..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn--primary btn--full">Отправить</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="footer__text">© 2026 TeachForum · <a href="contact.html" class="footer__link">Обратная связь</a></p>
+        </div>
+    </footer>
+
+    <script src="js/contact.js"></script>
+</body>
+</html>

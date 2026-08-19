@@ -1,0 +1,8 @@
+config.php
+mail_log.txt
+uploads/
+PHPMailer/
+*.log
+google*.html
+yandex_*.html
+*.zip
