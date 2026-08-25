@@ -37,12 +37,21 @@ if (isset($_GET['start_date']) && isset($_GET['end_date'])) {
 
 $lessons = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Конвертируем время каждого урока в часовой пояс учителя
+// Для каждого урока получаем всех участников и их индивидуальные статусы
 foreach ($lessons as &$lesson) {
     if ($lesson['time']) {
         $lesson['time'] = convertTimeForResponse($lesson['time'], $timezone);
     }
-    $lesson['rate'] = (int)($lesson['rate'] ?? 0); // гарантируем целое число
+    $lesson['rate'] = (int)($lesson['rate'] ?? 0);
+
+    $stmt = $pdo->prepare("
+        SELECT ls.student_id, ls.payment_status, s.first_name, s.last_name, s.rate
+        FROM lesson_students ls
+        JOIN students s ON ls.student_id = s.id
+        WHERE ls.lesson_id = ?
+    ");
+    $stmt->execute([$lesson['id']]);
+    $lesson['students'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 unset($lesson);
 
