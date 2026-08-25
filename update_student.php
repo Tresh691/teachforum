@@ -12,6 +12,7 @@ $student_id = (int)($_POST['id'] ?? 0);
 $first_name = trim($_POST['first_name'] ?? '');
 $last_name  = trim($_POST['last_name'] ?? '');
 $subject    = trim($_POST['subject'] ?? '');
+$rate       = (int)($_POST['rate'] ?? 0);
 
 if ($first_name === '') {
     echo json_encode(['success' => false, 'error' => 'Имя обязательно']);
@@ -26,7 +27,7 @@ if (!$stmt->fetch()) {
     exit;
 }
 
-$stmt = $pdo->prepare("UPDATE students SET first_name = ?, last_name = ?, subject = ? WHERE id = ?");
-$stmt->execute([$first_name, $last_name, $subject ?: null, $student_id]);
+$stmt = $pdo->prepare("UPDATE students SET first_name = ?, last_name = ?, subject = ?, rate = ? WHERE id = ?");
+$stmt->execute([$first_name, $last_name, $subject ?: null, $rate, $student_id]);
 
 echo json_encode(['success' => true]);
