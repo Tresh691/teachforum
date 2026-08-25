@@ -396,7 +396,6 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
         </div>`}function renderHelp(){setMainContent(`
         <div class="help-page">
             <h2>📘 Полное руководство по TeachForum</h2>
-            <p style="color:var(--text-secondary); margin-bottom:24px;">Конкретные шаги по каждому разделу. Без воды.</p>
 
             <div style="display:grid; gap:20px;">
 
@@ -406,7 +405,7 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <h3>1. Ученики</h3>
                     <p><strong>Добавление:</strong> нажмите \xab+ Добавить ученика\xbb → заполните Имя, Фамилию, Предмет. Email необязателен. Нажмите \xabСоздать\xbb. Система сгенерирует логин и пароль автоматически.</p>
                     <p style="color:#dc2626; font-weight:600;">⚠️ Пароль показывается один раз. Сразу скопируйте его кнопкой \xab📋 Скопировать всё\xbb или отправьте через \xab📤 Поделиться\xbb.</p>
-                    <p><strong>Редактирование:</strong> в таблице учеников нажмите ✏️. Измените имя, фамилию или предмет → \xabСохранить\xbb.</p>
+                    <p><strong>Редактирование:</strong> в таблице учеников нажмите ✏️. Измените имя, фамилию, предмет и <strong>ставку</strong> (₽ за урок). Ставка используется для подсчёта сумм в разделе \xabМоё расписание\xbb → месяц. По умолчанию ставка = 0.</p>
                     <p><strong>Удаление:</strong> нажмите 🗑️ рядом с учеником → подтвердите. Удалятся все его уроки, задания и файлы.</p>
                     <p><strong>Календарь ученика:</strong> кликните по строке с именем в таблице.</p>
                 </div>
@@ -417,26 +416,33 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <h3>2. Моё расписание</h3>
                     <p>Три режима просмотра: <strong>День</strong>, <strong>Неделя</strong>, <strong>Месяц</strong>. Переключайте кнопками под заголовком.</p>
                     <p><strong>День:</strong> список уроков на выбранную дату. Стрелки ← → листают день назад/вперёд. Кнопка \xabСегодня\xbb возвращает к текущей дате.</p>
-                    <p><strong>Неделя:</strong> сетка 7 дней. В каждой ячейке — время и имя ученика. Клик по ячейке открывает расписание этого дня.</p>
-                    <p><strong>Месяц:</strong> классический календарь. Клик по дню с уроком открывает календарь этого ученика. Стрелки переключают месяц.</p>
-                    <p>На карточке урока отображается: время, имя ученика, тема, статус оплаты (цветной бейдж), иконка 🎥 если есть запись.</p>
+                    <p><strong>Неделя:</strong> сетка 7 дней. В каждой ячейке - время и имена учеников. Если урок групповой, имена выводятся через слэш (например, \xabвова/дима\xbb).</p>
+                    <p><strong>Месяц:</strong> классический календарь. Дни с уроками подсвечены цветом в зависимости от статуса оплаты:
+                        <span style="display:inline-block; background:#d1fae5; color:#065f46; padding:2px 6px; border-radius:4px; font-size:12px;">оплачено</span>,
+                        <span style="display:inline-block; background:#fee2e2; color:#991b1b; padding:2px 6px; border-radius:4px; font-size:12px;">не оплачено</span>,
+                        <span style="display:inline-block; background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px; font-size:12px;">ожидается</span>,
+                        <span style="display:inline-block; background:#f3f4f6; color:#6b7280; padding:2px 6px; border-radius:4px; font-size:12px;">не указан</span>.
+                    </p>
+                    <p>Под календарём месяца выводится сумма по каждой группе статусов (оплачено, не оплачено, ожидается). Сумма считается как сумма ставок учеников, участвующих в уроках.</p>
                 </div>
 
-                <!-- 3. Календарь ученика -->
+                <!-- 3. Календарь и уроки -->
                 <div style="background:#f8fafc; border-radius:16px; padding:24px; border-left:5px solid #10b981;">
                     <div style="font-size:36px; margin-bottom:10px;">🗓️</div>
                     <h3>3. Календарь и уроки</h3>
                     <p><strong>Переключение месяцев:</strong> стрелки ← → в шапке календаря.</p>
                     <p><strong>Виды отображения:</strong> кнопки \xab📅 Календарь\xbb и \xab📋 Таблица\xbb. В таблице все уроки месяца списком с быстрым изменением статуса оплаты.</p>
-                    <p><strong>Добавление урока:</strong> клик по пустой дате → введите время и тему → \xabСохранить\xbb. Если указать время раньше 08:00 или позже 21:00, система покажет предупреждение.</p>
+                    <p><strong>Добавление урока:</strong> клик по пустой дате → выберите одного или нескольких учеников (кнопка \xab+ Добавить ученика\xbb). Основной ученик уже отмечен, его снять нельзя. Затем укажите время и тему → \xabСохранить\xbb. Если указать время раньше 08:00 или позже 21:00, система покажет предупреждение.</p>
+                    <p><strong>Групповые уроки:</strong> в карточке урока отображаются все участники, и у каждого ученика свой статус оплаты (кликабельный бейдж). Можно менять статус каждого ученика отдельно.</p>
+                    <p><strong>Перенос урока:</strong> в карточке урока появилась кнопка \xab🔄 Перенести\xbb. Она открывает окно, где можно изменить дату и/или время, не затрагивая остальные данные (тема, статусы, файлы, комментарий, ссылка).</p>
                     <p><strong>Редактирование урока:</strong> клик по дате с уроком. Откроется карточка с полями:</p>
                     <ul style="margin:8px 0 8px 20px; color:var(--text-secondary);">
-                        <li><strong>Время</strong> — поле ввода типа time.</li>
-                        <li><strong>Тема</strong> — текстовое поле.</li>
-                        <li><strong>Статус оплаты</strong> — бейдж-кнопка. Кликайте по ней для переключения: Не указан → Оплачено → Не оплачено → Ожидается. Цвет меняется мгновенно, но окончательно сохраняется только при нажатии кнопки \xabСохранить\xbb внизу карточки.</li>
-                        <li><strong>Файлы</strong> — кнопка \xab📎 Выбрать файлы\xbb → выберите один или несколько файлов → \xabЗагрузить\xbb. Файлы появятся в списке под полем. Удаление — кнопка 🗑️ рядом с файлом.</li>
-                        <li><strong>Комментарий</strong> — многострочное поле для заметок.</li>
-                        <li><strong>Ссылка на запись</strong> — вставьте URL. Если это Rutube, видеоплеер появится автоматически под полем.</li>
+                        <li><strong>Время</strong> - поле ввода типа time.</li>
+                        <li><strong>Тема</strong> - текстовое поле.</li>
+                        <li><strong>Участники и статусы оплаты</strong> - список учеников с индивидуальными бейджами статусов.</li>
+                        <li><strong>Файлы</strong> - кнопка \xab📎 Выбрать файлы\xbb → выберите один или несколько файлов → \xabЗагрузить\xbb. Файлы появятся в списке под полем. Удаление - кнопка 🗑️ рядом с файлом.</li>
+                        <li><strong>Комментарий</strong> - многострочное поле для заметок.</li>
+                        <li><strong>Ссылка на запись</strong> - вставьте URL. Если это Rutube, видеоплеер появится автоматически под полем.</li>
                     </ul>
                     <p><strong>Удаление урока:</strong> кнопка \xabУдалить\xbb внизу карточки. Действие необратимо.</p>
                 </div>
@@ -447,10 +453,10 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <h3>4. Статистика по оплате</h3>
                     <p>Над календарём ученика отображается панель с цифрами за текущий месяц:</p>
                     <ul style="margin:8px 0 8px 20px; color:var(--text-secondary);">
-                        <li><strong>Всего уроков</strong> — общее количество.</li>
-                        <li><strong>🟢 Оплачено</strong> — зелёный счётчик.</li>
-                        <li><strong>🔴 Не оплачено</strong> — красный счётчик.</li>
-                        <li><strong>🟡 Ожидается</strong> — жёлтый счётчик.</li>
+                        <li><strong>Всего уроков</strong> - общее количество.</li>
+                        <li><strong>🟢 Оплачено</strong> - зелёный счётчик.</li>
+                        <li><strong>🔴 Не оплачено</strong> - красный счётчик.</li>
+                        <li><strong>🟡 Ожидается</strong> - жёлтый счётчик.</li>
                     </ul>
                     <p>Дни в календаре подсвечиваются фоном в зависимости от статуса оплаты урока: зелёный (оплачено), красный (не оплачено), жёлтый (ожидается), серый (не указан).</p>
                 </div>
@@ -461,23 +467,23 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <h3>5. Домашние задания</h3>
                     <p><strong>Выбор ученика:</strong> в разделе \xabДомашние задания\xbb кликните по ученику в таблице.</p>
                     <p><strong>Категории:</strong> вкладки над списком блоков. Создайте категорию кнопкой \xab+ Категория\xbb. Например: \xabМатематика\xbb, \xabРусский язык\xbb. Блоки можно фильтровать по категориям.</p>
-                    <p><strong>Блоки:</strong> контейнеры для заданий. Создайте блок кнопкой \xab+ Блок\xbb. Переименуйте через ✏️, удалите через 🗑️. При удалении блока задания не удаляются — они переходят в группу \xabБез блока\xbb.</p>
+                    <p><strong>Блоки:</strong> контейнеры для заданий. Создайте блок кнопкой \xab+ Блок\xbb. Переименуйте через ✏️, удалите через 🗑️. При удалении блока задания не удаляются - они переходят в группу \xabБез блока\xbb.</p>
                     <p><strong>Задания:</strong> внутри блока нажмите \xab+ Задание\xbb. Заполните:</p>
                     <ul style="margin:8px 0 8px 20px; color:var(--text-secondary);">
-                        <li><strong>Название</strong> — обязательное поле.</li>
-                        <li><strong>Текст</strong> — условие задания.</li>
-                        <li><strong>Ссылки</strong> — каждая с новой строки. Поддерживаются Google Формы, Rutube и любые URL.</li>
+                        <li><strong>Название</strong> - обязательное поле.</li>
+                        <li><strong>Текст</strong> - условие задания.</li>
+                        <li><strong>Ссылки</strong> - каждая с новой строки. Поддерживаются Google Формы, Rutube и любые URL.</li>
                     </ul>
                     <p><strong>Статус:</strong> клик по бейджу \xabВыполнено\xbb / \xabНе выполнено\xbb переключает статус мгновенно.</p>
-                    <p><strong>Перетаскивание:</strong> зажмите заголовок блока левой кнопкой мыши и перетащите выше/ниже. Отпустите — порядок сохранится.</p>
-                    <p><strong>Библиотека:</strong> если у вас есть задания в библиотеке, на странице ученика появится кнопка \xabВыбрать из библиотеки\xbb. Выберите задание, категорию и блок — и оно назначится ученику.</p>
+                    <p><strong>Перетаскивание:</strong> зажмите заголовок блока левой кнопкой мыши и перетащите выше/ниже. Отпустите - порядок сохранится.</p>
+                    <p><strong>Библиотека:</strong> если у вас есть задания в библиотеке, на странице ученика появится кнопка \xabВыбрать из библиотеки\xbb. Выберите задание, категорию и блок - и оно назначится ученику.</p>
                 </div>
 
                 <!-- 6. Библиотека -->
                 <div style="background:#f8fafc; border-radius:16px; padding:24px; border-left:5px solid #ec4899;">
                     <div style="font-size:36px; margin-bottom:10px;">📖</div>
                     <h3>6. Библиотека заданий</h3>
-                    <p>Библиотека — это хранилище типовых заданий. Структура: <strong>Раздел → Блок → Задание</strong>.</p>
+                    <p>Библиотека - это хранилище типовых заданий. Структура: <strong>Раздел → Блок → Задание</strong>.</p>
                     <p><strong>Разделы:</strong> создавайте папки кнопкой \xab+ Раздел\xbb. Например: \xabОГЭ Математика\xbb, \xabЕГЭ Физика\xbb. Редактируйте название через ✏️, удаляйте через 🗑️. При удалении раздела блоки внутри него становятся \xabБез раздела\xbb.</p>
                     <p><strong>Блоки:</strong> внутри раздела создавайте блоки кнопкой \xab+ Добавить блок\xbb. Каждый блок имеет название. Редактирование (✏️) позволяет также перенести блок в другой раздел. Удаление (🗑️) переносит задания в \xabБез блока\xbb.</p>
                     <p><strong>Задания:</strong> откройте блок → \xab+ Добавить задание\xbb. Поля: название, текст, ссылки (каждая с новой строки). Задания можно редактировать (✏️) и удалять (🗑️).</p>
@@ -485,8 +491,8 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <p><strong>Назначение ученику:</strong></p>
                     <ul style="margin:8px 0 8px 20px; color:var(--text-secondary);">
                         <li>В карточке задания нажмите \xabНазначить ученику\xbb → выберите одного или нескольких учеников → \xabНазначить\xbb.</li>
-                        <li>В карточке блока нажмите \xabНазначить блок\xbb — все задания блока назначатся выбранным ученикам сразу.</li>
-                        <li>При назначении категория в домашних заданиях подставляется автоматически по названию раздела библиотеки. Если у ученика такой категории нет — она создастся сама.</li>
+                        <li>В карточке блока нажмите \xabНазначить блок\xbb - все задания блока назначатся выбранным ученикам сразу.</li>
+                        <li>При назначении категория в домашних заданиях подставляется автоматически по названию раздела библиотеки. Если у ученика такой категории нет - она создастся сама.</li>
                     </ul>
                 </div>
 
@@ -494,14 +500,14 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                 <div style="background:#f8fafc; border-radius:16px; padding:24px; border-left:5px solid #06b6d4;">
                     <div style="font-size:36px; margin-bottom:10px;">📚</div>
                     <h3>7. Лекции и Шпоры</h3>
-                    <p>Разделы для хранения учебных материалов. Работают одинаково: создаёте блоки, внутри них — элементы.</p>
+                    <p>Разделы для хранения учебных материалов. Работают одинаково: создаёте блоки, внутри них - элементы.</p>
                     <p><strong>Блоки:</strong> \xab+ Добавить блок\xbb → введите название. Редактирование (✏️), удаление (🗑️), перетаскивание работают как в библиотеке.</p>
                     <p><strong>Элементы:</strong> внутри блока \xab+ Добавить лекцию/материал\xbb. Поля:</p>
                     <ul style="margin:8px 0 8px 20px; color:var(--text-secondary);">
-                        <li><strong>Название</strong> — обязательно.</li>
-                        <li><strong>Ссылка</strong> — URL. Rutube-ссылки автоматически превращаются в плеер.</li>
-                        <li><strong>Комментарий</strong> — пояснение к материалу.</li>
-                        <li><strong>Файлы</strong> — прикрепляются в карточке элемента через \xab📎 Выбрать файлы\xbb.</li>
+                        <li><strong>Название</strong> - обязательно.</li>
+                        <li><strong>Ссылка</strong> - URL. Rutube-ссылки автоматически превращаются в плеер.</li>
+                        <li><strong>Комментарий</strong> - пояснение к материалу.</li>
+                        <li><strong>Файлы</strong> - прикрепляются в карточке элемента через \xab📎 Выбрать файлы\xbb.</li>
                     </ul>
                     <p><strong>Доступ:</strong> кнопка 👥 на странице блока позволяет выбрать, какие именно ученики видят этот блок. Не выбранные ученики блок не увидят.</p>
                 </div>
@@ -513,12 +519,12 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <p>Собственные разделы в боковом меню. Создайте через \xab+ Добавить раздел\xbb в сайдбаре.</p>
                     <p><strong>Типы разделов:</strong></p>
                     <ul style="margin:8px 0 8px 20px; color:var(--text-secondary);">
-                        <li><strong>📄 Материалы</strong> — как лекции: название, ссылка, комментарий, файлы.</li>
-                        <li><strong>📝 Задания</strong> — как библиотека: название, текст, ссылки. Карточки отображаются в стиле заданий.</li>
-                        <li><strong>📚 Лекции</strong> — стандартные материалы с Rutube-плеером.</li>
+                        <li><strong>📄 Материалы</strong> - как лекции: название, ссылка, комментарий, файлы.</li>
+                        <li><strong>📝 Задания</strong> - как библиотека: название, текст, ссылки. Карточки отображаются в стиле заданий.</li>
+                        <li><strong>📚 Лекции</strong> - стандартные материалы с Rutube-плеером.</li>
                     </ul>
                     <p><strong>Структура:</strong> Раздел → Блок → Элемент. Блоки и элементы добавляются кнопками \xab+ Добавить блок/элемент\xbb. Редактирование и удаление через ✏️ и 🗑️.</p>
-                    <p><strong>Доступ:</strong> кнопка 👥 на странице раздела. Выберите учеников — только они увидят раздел в своём меню.</p>
+                    <p><strong>Доступ:</strong> кнопка 👥 на странице раздела. Выберите учеников - только они увидят раздел в своём меню.</p>
                 </div>
 
                 <!-- 9. Файлы -->
@@ -549,9 +555,9 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <p>Нажмите ⚙️ в шапке сайдбара (рядом с аватаркой).</p>
                     <p>В открывшемся окне для каждого раздела доступно:</p>
                     <ul style="margin:8px 0 8px 20px; color:var(--text-secondary);">
-                        <li><strong>Название</strong> — переименуйте любой пункт меню.</li>
-                        <li><strong>Иконка</strong> — выберите эмодзи из списка.</li>
-                        <li><strong>Видимость</strong> — галочка \xabПоказывать\xbb. Если снять, раздел исчезнет из меню и у учеников тоже.</li>
+                        <li><strong>Название</strong> - переименуйте любой пункт меню.</li>
+                        <li><strong>Иконка</strong> - выберите эмодзи из списка.</li>
+                        <li><strong>Видимость</strong> - галочка \xabПоказывать\xbb. Если снять, раздел исчезнет из меню и у учеников тоже.</li>
                     </ul>
                     <p>Нажмите \xabСохранить\xbb. Изменения применяются мгновенно.</p>
                 </div>
@@ -561,7 +567,7 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <div style="font-size:36px; margin-bottom:10px;">🕒</div>
                     <h3>12. Часовой пояс</h3>
                     <p>Нажмите 🕒 в шапке сайдбара. Выберите ваш город из списка (от Калининграда до Камчатки, а также Минск и Алматы).</p>
-                    <p>Нажмите \xabСохранить\xbb. Время всех существующих уроков пересчитается автоматически. Ученик тоже может задать свой часовой пояс — время будет отображаться в его локальном времени.</p>
+                    <p>Нажмите \xabСохранить\xbb. Время всех существующих уроков пересчитается автоматически. Ученик тоже может задать свой часовой пояс - время будет отображаться в его локальном времени.</p>
                 </div>
 
                 <!-- 13. Аватар -->
@@ -579,10 +585,10 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <h3>14. Перетаскивание (Drag & Drop)</h3>
                     <p>Работает в следующих разделах:</p>
                     <ul style="margin:8px 0 8px 20px; color:var(--text-secondary);">
-                        <li>Домашние задания — блоки заданий.</li>
-                        <li>Библиотека — блоки внутри разделов и задания внутри блоков.</li>
-                        <li>Лекции и Шпоры — блоки.</li>
-                        <li>Кастомные разделы — блоки внутри раздела.</li>
+                        <li>Домашние задания - блоки заданий.</li>
+                        <li>Библиотека - блоки внутри разделов и задания внутри блоков.</li>
+                        <li>Лекции и Шпоры - блоки.</li>
+                        <li>Кастомные разделы - блоки внутри раздела.</li>
                     </ul>
                     <p><strong>Как использовать:</strong> зажмите левую кнопку мыши на карточке блока (или задания), перетащите в нужное место, отпустите. Порядок сохраняется на сервере автоматически.</p>
                 </div>
@@ -594,8 +600,8 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <ul style="margin:8px 0 8px 20px; color:var(--text-secondary);">
                         <li>Обновите страницу клавишей <strong>F5</strong> или <strong>Ctrl+R</strong>.</li>
                         <li>Проверьте подключение к интернету.</li>
-                        <li>Если файл не загружается — убедитесь, что его размер не превышает лимит хостинга (обычно 20–50 МБ).</li>
-                        <li>Если Rutube-видео не отображается — проверьте, что ссылка начинается с <code>rutube.ru/video/</code>.</li>
+                        <li>Если файл не загружается - убедитесь, что его размер не превышает лимит хостинга (обычно 20–50 МБ).</li>
+                        <li>Если Rutube-видео не отображается - проверьте, что ссылка начинается с <code>rutube.ru/video/</code>.</li>
                     </ul>
                     <p>По любым вопросам: пишите на <strong>Teachforum@mail.ru</strong> или через <a href="contact.html" target="_blank" style="color:var(--primary);">форму обратной связи</a>.</p>
                 </div>
@@ -872,14 +878,14 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <div class="stats-panel__label">🟡 Ожидается</div>
                     <div class="stats-panel__value">${n.pending||0}</div>
                 </div>
-            </div>`,w="calendar"===currentViewMode;setMainContent(`
+            </div>`,x="calendar"===currentViewMode;setMainContent(`
             <button class="btn-back" onclick="renderStudents()">Назад к ученикам</button>
             ${k}
             <div class="schedule-mode-switcher" style="margin-bottom:20px;">
-                <button id="switchCalendar" class="schedule-mode-btn ${w?"active":""}" onclick="switchViewMode(${e}, '${t}', ${l}, ${o})">📅 Календарь</button>
-                <button id="switchTable" class="schedule-mode-btn ${w?"":"active"}" onclick="switchViewMode(${e}, '${t}', ${l}, ${o})">📋 Таблица</button>
+                <button id="switchCalendar" class="schedule-mode-btn ${x?"active":""}" onclick="switchViewMode(${e}, '${t}', ${l}, ${o})">📅 Календарь</button>
+                <button id="switchTable" class="schedule-mode-btn ${x?"":"active"}" onclick="switchViewMode(${e}, '${t}', ${l}, ${o})">📋 Таблица</button>
             </div>
-            <div id="calendarPanel" style="display:${w?"":"none"};">
+            <div id="calendarPanel" style="display:${x?"":"none"};">
                 <div class="calendar">
                     <div class="calendar-header">
                         <button class="btn btn--ghost" onclick="changeMonth(${e}, '${t}', ${1===o?l-1:l}, ${1===o?12:o-1})">←</button>
@@ -893,7 +899,7 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     </div>
                 </div>
             </div>
-            <div id="tablePanel" style="display:${w?"none":""};">
+            <div id="tablePanel" style="display:${x?"none":""};">
                 <div id="lessonsTableContainer"></div>
             </div>`),"table"===currentViewMode&&loadLessonsTable(e,t,l,o)}).catch(()=>alert("Ошибка загрузки расписания"))}function dayClick(e,t,l,o,a){fetch(`get_lesson.php?student_id=${t}&date=${e}`).then(e=>e.json()).then(n=>{n&&n.id?openLessonPage(n,t,l,o,a):openAddLessonModal(e,t,l,o,a)}).catch(()=>openAddLessonModal(e,t,l,o,a))}function openAddLessonModal(e,t,l,o,a){selectedLessonStudents=[{id:t,name:l}];let n=document.createElement("div");n.className="modal-overlay active",n.innerHTML=`
         <div class="modal">
@@ -1000,7 +1006,7 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                     <div class="week-day-header">СБ</div>
                     <div class="week-day-header">ВС</div>`;for(let a=0;a<7;a++){let n=shiftDate(t,a),s=e.filter(e=>e.lesson_date===n),i=n===new Date().toISOString().split("T")[0];o+=`<div class="week-day-cell" onclick="openDayFromWeek('${n}')">
                     <div class="week-day-date ${i?"today":""}">${new Date(n).getDate()}</div>`,s.forEach(e=>{let t=(e.students||[]).map(e=>e.first_name).join("/");o+=`<span class="week-lesson-dot">${e.time?.slice(0,5)} ${t}</span>`}),o+="</div>"}o+="</div>",document.getElementById("scheduleContent").innerHTML=o,currentScheduleDate=t})}function loadMonthSchedule(e,t){let l=`${e}-${String(t).padStart(2,"0")}-01`,o=`${e}-${String(t).padStart(2,"0")}-${new Date(e,t,0).getDate()}`;fetch(`get_teacher_schedule.php?start_date=${l}&end_date=${o}&timezone=${TEACHER_TIMEZONE}`).then(e=>e.json()).then(l=>{let o=new Date(e,t-1,1),a=new Date(e,t,0),n=new Date(o),s=n.getDay();n.setDate(n.getDate()+(0===s?-6:1-s));let i=new Date(a),r=i.getDay();i.setDate(i.getDate()+(0===r?0:7-r));let d="";for(let c=new Date(n);c<=i;c.setDate(c.getDate()+1)){let p=c.getFullYear(),u=String(c.getMonth()+1).padStart(2,"0"),m=String(c.getDate()).padStart(2,"0"),b=`${p}-${u}-${m}`,h=l.filter(e=>e.lesson_date===b),v=c.getMonth()!==t-1,y=b===new Date().toISOString().split("T")[0];d+=`<div class="calendar-day ${v?"other-month":""} ${y?"today":""}" onclick="openDayFromMonth('${b}')">
-                    <div class="calendar-date">${c.getDate()}</div>`,h.forEach(e=>{let t=(e.students||[]).map(e=>e.first_name).join("/"),l="lesson-dot",o=(e.students||[]).map(e=>e.payment_status);o.includes("unpaid")?l+=" lesson-dot--unpaid":o.includes("pending")?l+=" lesson-dot--pending":o.every(e=>"paid"===e)?l+=" lesson-dot--paid":l+=" lesson-dot--none",d+=`<span class="${l}">${e.time?.slice(0,5)} ${t}</span>`}),d+="</div>"}let g=0,f=0,k=0;l.forEach(e=>{(e.students||[]).forEach(e=>{let t=e.rate||0;"paid"===e.payment_status?g+=t:"unpaid"===e.payment_status?f+=t:"pending"===e.payment_status&&(k+=t)})});let w=`
+                    <div class="calendar-date">${c.getDate()}</div>`,h.forEach(e=>{let t=(e.students||[]).map(e=>e.first_name).join("/"),l="lesson-dot",o=(e.students||[]).map(e=>e.payment_status);o.includes("unpaid")?l+=" lesson-dot--unpaid":o.includes("pending")?l+=" lesson-dot--pending":o.every(e=>"paid"===e)?l+=" lesson-dot--paid":l+=" lesson-dot--none",d+=`<span class="${l}">${e.time?.slice(0,5)} ${t}</span>`}),d+="</div>"}let g=0,f=0,k=0;l.forEach(e=>{(e.students||[]).forEach(e=>{let t=e.rate||0;"paid"===e.payment_status?g+=t:"unpaid"===e.payment_status?f+=t:"pending"===e.payment_status&&(k+=t)})});let x=`
                 <div class="stats-panel" style="margin-top:16px;">
                     <div class="stats-panel__item stats-panel__item--paid">
                         <div class="stats-panel__label">🟢 Оплачено</div>
@@ -1014,7 +1020,7 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                         <div class="stats-panel__label">🟡 Ожидается</div>
                         <div class="stats-panel__value">${k} ₽</div>
                     </div>
-                </div>`,x=`
+                </div>`,w=`
                 <div class="teacher-calendar">
                     <div class="calendar-header">
                         <button class="btn btn--ghost" onclick="loadMonthSchedule(${1===t?e-1:e}, ${1===t?12:t-1})">←</button>
@@ -1028,7 +1034,7 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                         ${d}
                     </div>
                 </div>
-                ${w}`;document.getElementById("scheduleContent").innerHTML=x,currentScheduleDate=`${e}-${String(t).padStart(2,"0")}-01`}).catch(e=>{console.error("Ошибка загрузки расписания:",e),document.getElementById("scheduleContent").innerHTML='<div class="empty-state">Ошибка загрузки</div>'})}function openDayFromWeek(e){currentScheduleMode="day",currentScheduleDate=e,document.querySelectorAll(".schedule-mode-btn").forEach(e=>{e.classList.remove("active"),"День"===e.textContent.trim()&&e.classList.add("active")}),loadDaySchedule(e)}function openDayFromMonth(e){currentScheduleMode="day",currentScheduleDate=e,document.querySelectorAll(".schedule-mode-btn").forEach(e=>{e.classList.remove("active"),"День"===e.textContent.trim()&&e.classList.add("active")}),loadDaySchedule(e)}function openTeacherLessonFromSchedule(e,t){let[l,o]=t.split("-");renderCalendar(e,"Ученик",parseInt(l),parseInt(o))}function shiftDate(e,t){let l=new Date(e);return l.setDate(l.getDate()+t),l.toISOString().split("T")[0]}function getMonday(e){let t=new Date(e),l=t.getDay(),o=t.getDate()-l+(0===l?-6:1);return t.setDate(o),t.toISOString().split("T")[0]}function formatDate(e){return new Date(e).toLocaleDateString("ru-RU",{day:"numeric",month:"long"})}function openAvatarModal(){let e="undefined"!=typeof TEACHER_AVATAR?TEACHER_AVATAR:"",t=document.querySelector(".welcome-avatar")?.textContent.trim()||"?",l="";l=e?`<img src="${e}?t=${new Date().getTime()}" class="avatar-modal-preview" id="avatarPreview" alt="Аватар">`:`<div class="avatar-modal-placeholder" id="avatarPreview">${t}</div>`;let o=document.createElement("div");o.className="modal-overlay active",o.innerHTML=`
+                ${x}`;document.getElementById("scheduleContent").innerHTML=w,currentScheduleDate=`${e}-${String(t).padStart(2,"0")}-01`}).catch(e=>{console.error("Ошибка загрузки расписания:",e),document.getElementById("scheduleContent").innerHTML='<div class="empty-state">Ошибка загрузки</div>'})}function openDayFromWeek(e){currentScheduleMode="day",currentScheduleDate=e,document.querySelectorAll(".schedule-mode-btn").forEach(e=>{e.classList.remove("active"),"День"===e.textContent.trim()&&e.classList.add("active")}),loadDaySchedule(e)}function openDayFromMonth(e){currentScheduleMode="day",currentScheduleDate=e,document.querySelectorAll(".schedule-mode-btn").forEach(e=>{e.classList.remove("active"),"День"===e.textContent.trim()&&e.classList.add("active")}),loadDaySchedule(e)}function openTeacherLessonFromSchedule(e,t){let[l,o]=t.split("-");renderCalendar(e,"Ученик",parseInt(l),parseInt(o))}function shiftDate(e,t){let l=new Date(e);return l.setDate(l.getDate()+t),l.toISOString().split("T")[0]}function getMonday(e){let t=new Date(e),l=t.getDay(),o=t.getDate()-l+(0===l?-6:1);return t.setDate(o),t.toISOString().split("T")[0]}function formatDate(e){return new Date(e).toLocaleDateString("ru-RU",{day:"numeric",month:"long"})}function openAvatarModal(){let e="undefined"!=typeof TEACHER_AVATAR?TEACHER_AVATAR:"",t=document.querySelector(".welcome-avatar")?.textContent.trim()||"?",l="";l=e?`<img src="${e}?t=${new Date().getTime()}" class="avatar-modal-preview" id="avatarPreview" alt="Аватар">`:`<div class="avatar-modal-placeholder" id="avatarPreview">${t}</div>`;let o=document.createElement("div");o.className="modal-overlay active",o.innerHTML=`
         <div class="modal">
             <button class="modal__close" onclick="this.closest('.modal-overlay').remove()">&times;</button>
             <h3>Изменить фото</h3>
