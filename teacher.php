@@ -132,7 +132,7 @@ function getDayWord($n) {
     <meta name="description" content="Управляйте учениками, расписанием, домашними заданиями и библиотекой материалов.">
     <title>Личный кабинет — TeachForum</title>
     <link rel="stylesheet" href="css/style2.css">
-    <link rel="stylesheet" href="css/teacher10.css">
+    <link rel="stylesheet" href="css/teacher11.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -192,7 +192,7 @@ function getDayWord($n) {
     let TEACHER_TIMEZONE = <?= json_encode($_SESSION['user']['timezone'] ?? 'Europe/Moscow') ?>;
     window.__ONBOARDING_COMPLETED__ = <?= json_encode((bool)$onboardingCompleted) ?>;
     </script>
-    <script src="js/teacher18.js"></script>
+    <script src="js/teacher19.js"></script>
     <script>
     loadCustomBlocks();
     applyHiddenSections();

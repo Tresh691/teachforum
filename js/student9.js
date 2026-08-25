@@ -47,9 +47,8 @@ function loadStudentSchedule(){let e=new Date;renderStudentCalendar(e.getFullYea
                     ${t.recording_link&&getRutubeEmbed(t.recording_link)?getRutubeEmbed(t.recording_link):""}
                 </div>`,loadStudentFiles("lesson",e,"studentLessonFiles")})}function loadStudentHomeworks(){Promise.all([fetch("student_get_homework_categories.php").then(e=>e.json()),fetch("student_get_homework_blocks.php?category_id=all").then(e=>e.json()),fetch("student_get_homeworks.php").then(e=>e.json())]).then(([e,t,a])=>{window.currentStudentHomeworkData={categories:e,blocks:t,homeworks:a},renderStudentHomeworkTabs()}).catch(e=>{console.error("Ошибка загрузки домашних заданий:",e),document.getElementById("mainContent").innerHTML='<div class="empty-state"><div class="empty-icon">\uD83D\uDCDD</div><h3>Ошибка загрузки</h3></div>'})}function renderStudentHomeworkTabs(e=null){let{categories:t,blocks:a,homeworks:l}=window.currentStudentHomeworkData,s="";t.forEach(t=>{let a=e==t.id?"active":"";s+=`<button class="schedule-mode-btn ${a}" onclick="renderStudentHomeworkTabs(${t.id})">📁 ${t.name}</button>`});let n="<h2>Домашние задания</h2>";n+=`<div class="schedule-mode-switcher" style="margin-bottom:20px;">${s=`
         <button class="schedule-mode-btn ${null===e?"active":""}" onclick="renderStudentHomeworkTabs(null)">📁 Все</button>
-        <button class="schedule-mode-btn ${"none"===e?"active":""}" onclick="renderStudentHomeworkTabs('none')">📁 Без категории</button>
         ${s}
-    `}</div>`;let i=a;null!==e&&"all"!==e&&(i="none"===e?a.filter(e=>null===e.category_id):a.filter(t=>t.category_id==e));let o={},d=[];l.forEach(e=>{if(e.block_id){let t=i.some(t=>t.id==e.block_id);t?(o[e.block_id]||(o[e.block_id]=[]),o[e.block_id].push(e)):d.push(e)}else d.push(e)});let c="";i.forEach(e=>{let t=o[e.id]||[];c+=`
+    `}</div>`;let i=a;null!==e&&"all"!==e&&(i=a.filter(t=>t.category_id==e));let o={},d=[];l.forEach(e=>{if(e.block_id){let t=i.some(t=>t.id==e.block_id);t?(o[e.block_id]||(o[e.block_id]=[]),o[e.block_id].push(e)):d.push(e)}else d.push(e)});let c="";i.forEach(e=>{let t=o[e.id]||[];c+=`
             <div class="homework-block">
                 <div class="homework-block__header"><h3 class="homework-block__title">${e.name}</h3></div>
                 ${t.length?`
@@ -59,7 +58,7 @@ function loadStudentSchedule(){let e=new Date;renderStudentCalendar(e.getFullYea
                             <tbody>${t.map(renderHomeworkRow).join("")}</tbody>
                         </table>
                     </div>`:'<p class="block-empty-text">Нет заданий</p>'}
-            </div>`}),(null===e||"none"===e)&&d.length>0&&(c+=`
+            </div>`}),null===e&&d.length>0&&(c+=`
             <div class="homework-block">
                 <div class="homework-block__header"><h3 class="homework-block__title">Без блока</h3></div>
                 ${d.length?`
@@ -69,7 +68,7 @@ function loadStudentSchedule(){let e=new Date;renderStudentCalendar(e.getFullYea
                             <tbody>${d.map(renderHomeworkRow).join("")}</tbody>
                         </table>
                     </div>`:""}
-            </div>`),0===i.length&&(null!==e&&"none"!==e||0===d.length)&&(c+='<div class="empty-state"><div class="empty-icon">\uD83D\uDCDD</div><h3>Нет заданий в этой категории</h3></div>'),n+=c,document.getElementById("mainContent").innerHTML=n}function loadStudentBlocks(e){let t="lecture"===e?"Лекции":"Шпоры";fetch(`student_get_blocks.php?type=${e}`).then(e=>e.json()).then(async a=>{let l=`<h2>${t}</h2>`;if(0===a.length)l+=`<div class="empty-state"><div class="empty-icon">${"lecture"===e?"\uD83D\uDCDA":"\uD83D\uDCCB"}</div><h3>Нет блоков</h3></div>`;else{for(let s of(l+='<div class="blocks-grid">',a)){let n=await fetch(`student_get_block_items.php?block_id=${s.id}`).then(e=>e.json()),i="";n.length>0?(i='<ul class="block-items-list">',n.forEach(e=>{i+=`<li>${e.title} ${e.link?`<a href="${e.link}" target="_blank">🔗</a>`:""}${e.comment?`<br><small>${e.comment}</small>`:""}</li>`}),i+="</ul>"):i=`<p class="block-empty-text">Нет материалов</p>`,l+=`
+            </div>`),0===i.length&&(null!==e||0===d.length)&&(c+='<div class="empty-state"><div class="empty-icon">\uD83D\uDCDD</div><h3>Нет заданий в этой категории</h3></div>'),n+=c,document.getElementById("mainContent").innerHTML=n}function loadStudentBlocks(e){let t="lecture"===e?"Лекции":"Шпоры";fetch(`student_get_blocks.php?type=${e}`).then(e=>e.json()).then(async a=>{let l=`<h2>${t}</h2>`;if(0===a.length)l+=`<div class="empty-state"><div class="empty-icon">${"lecture"===e?"\uD83D\uDCDA":"\uD83D\uDCCB"}</div><h3>Нет блоков</h3></div>`;else{for(let s of(l+='<div class="blocks-grid">',a)){let n=await fetch(`student_get_block_items.php?block_id=${s.id}`).then(e=>e.json()),i="";n.length>0?(i='<ul class="block-items-list">',n.forEach(e=>{i+=`<li>${e.title} ${e.link?`<a href="${e.link}" target="_blank">🔗</a>`:""}${e.comment?`<br><small>${e.comment}</small>`:""}</li>`}),i+="</ul>"):i=`<p class="block-empty-text">Нет материалов</p>`,l+=`
                         <div class="block-card" style="cursor:pointer;" onclick="viewStudentBlock(${s.id}, '${s.name.replace(/'/g,"\\'")}', '${e}')">
                             <h3 class="block-card__title">${s.name}</h3>
                             ${i}

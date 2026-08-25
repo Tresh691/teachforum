@@ -85,7 +85,7 @@ $studentTimezone = $stmt->fetchColumn() ?: 'Europe/Moscow';
     <meta name="description" content="Просматривайте своё расписание, домашние задания и учебные материалы.">
     <title>Личный кабинет — TeachForum</title>
     <link rel="stylesheet" href="css/style2.css">
-    <link rel="stylesheet" href="css/teacher9.css">
+    <link rel="stylesheet" href="css/teacher11.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -128,7 +128,7 @@ $studentTimezone = $stmt->fetchColumn() ?: 'Europe/Moscow';
         const SIDEBAR_CUSTOMIZATION = <?= $sidebarCustomJson ?>;
         let STUDENT_TIMEZONE = <?= json_encode($studentTimezone) ?>;
     </script>
-    <script src="js/student8.js"></script>
+    <script src="js/student9.js"></script>
     <script>
         // Применяем скрытие разделов и кастомизацию после загрузки кастомных блоков
         document.addEventListener('DOMContentLoaded', function() {
