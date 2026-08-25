@@ -917,13 +917,6 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
         <div class="form-group">
             <label class="form-label">Прикреплённые файлы</label>
             <div id="lessonFilesContainer"></div>
-            <div class="form-group">
-                <label class="form-label">Статус оплаты</label>
-                <span id="paymentBadge" class="badge badge--${e.payment_status||"none"} badge--clickable" 
-                    onclick="cyclePaymentStatus(${e.id})">
-                    ${getPaymentLabel(e.payment_status)}
-                </span>
-            </div>
             <div class="file-upload-custom">
                 <label for="lessonFileInput" class="file-upload-trigger">📎 Выбрать файлы</label>
                 <input type="file" id="lessonFileInput" multiple
@@ -932,6 +925,13 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
                 <button class="btn btn--secondary" onclick="uploadFiles('lesson', ${e.id}, 'lessonFileInput', 'lessonFilesContainer', 'lessonFileInfo')">Загрузить</button>
             </div>
         </div>
+            <div class="form-group">
+                <label class="form-label">Статус оплаты</label>
+                <span id="paymentBadge" class="badge badge--${e.payment_status||"none"} badge--clickable" 
+                    onclick="cyclePaymentStatus(${e.id})">
+                    ${getPaymentLabel(e.payment_status)}
+                </span>
+            </div>
         <div class="form-group"><label class="form-label">Комментарий</label><textarea id="editComment" class="form-input" rows="3">${i}</textarea></div>
         <div class="form-group">
             <label class="form-label">Ссылка на запись</label>
