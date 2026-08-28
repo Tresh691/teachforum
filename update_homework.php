@@ -23,15 +23,18 @@ if ($id > 0 && $status !== null) {
 $block_id = $_POST['block_id'] ?? null;
 $title    = trim($_POST['title'] ?? '');
 $text     = trim($_POST['text'] ?? '');
-$links    = trim($_POST['links'] ?? '');
+$linksRaw = trim($_POST['links'] ?? '');
 
 if ($title === '') {
     echo json_encode(['success' => false, 'error' => 'Название обязательно']);
     exit;
 }
 
-// Преобразуем пустую строку ссылок в NULL, чтобы избежать ошибки JSON
-if ($links === '') {
+// Преобразуем строку ссылок в JSON-массив (каждая строка – отдельная ссылка)
+if ($linksRaw !== '') {
+    $linksArray = array_values(array_filter(array_map('trim', explode("\n", $linksRaw))));
+    $links = json_encode($linksArray, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+} else {
     $links = null;
 }
 
