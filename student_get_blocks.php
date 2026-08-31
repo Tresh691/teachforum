@@ -8,9 +8,8 @@ require_once __DIR__ . '/config.php';
 $student_id = (int)$_SESSION['user']['id'];
 $type = $_GET['type'] ?? 'lecture';
 
-// Только блоки, к которым ученик имеет явный доступ
 $stmt = $pdo->prepare("
-    SELECT b.id, b.name, b.sort_order
+    SELECT b.id, b.name, b.sort_order, b.section_id
     FROM blocks b
     JOIN students s ON b.teacher_id = s.teacher_id
     WHERE s.id = ? AND b.type = ?

@@ -192,7 +192,7 @@ function getDayWord($n) {
     let TEACHER_TIMEZONE = <?= json_encode($_SESSION['user']['timezone'] ?? 'Europe/Moscow') ?>;
     window.__ONBOARDING_COMPLETED__ = <?= json_encode((bool)$onboardingCompleted) ?>;
     </script>
-    <script src="js/teacher19.js"></script>
+    <script src="js/teacher20.js"></script>
     <script>
     loadCustomBlocks();
     applyHiddenSections();

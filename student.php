@@ -128,7 +128,7 @@ $studentTimezone = $stmt->fetchColumn() ?: 'Europe/Moscow';
         const SIDEBAR_CUSTOMIZATION = <?= $sidebarCustomJson ?>;
         let STUDENT_TIMEZONE = <?= json_encode($studentTimezone) ?>;
     </script>
-    <script src="js/student10.js"></script>
+    <script src="js/student11.js"></script>
     <script>
         // Применяем скрытие разделов и кастомизацию после загрузки кастомных блоков
         document.addEventListener('DOMContentLoaded', function() {
