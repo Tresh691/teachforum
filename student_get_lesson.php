@@ -6,17 +6,28 @@ if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'student') {
     exit;
 }
 require_once __DIR__ . '/config.php';
-$student_id = $_SESSION['user']['id'];
-$id = $_GET['id'] ?? 0;
+
+$student_id = (int)$_SESSION['user']['id'];
+$id = (int)($_GET['id'] ?? 0);
 $timezone = $_GET['timezone'] ?? 'Europe/Moscow';
 
-$stmt = $pdo->prepare("SELECT id, lesson_date, time, topic, comment, recording_link, payment_status FROM lessons WHERE id = ? AND student_id = ?");
-$stmt->execute([$id, $student_id]);
+// Ищем урок, где ученик либо основной, либо участник
+$stmt = $pdo->prepare("
+    SELECT l.id, l.lesson_date, l.time, l.topic, l.comment, l.recording_link, l.payment_status
+    FROM lessons l
+    LEFT JOIN lesson_students ls ON l.id = ls.lesson_id
+    WHERE l.id = ?
+      AND (l.student_id = ? OR ls.student_id = ?)
+    GROUP BY l.id
+    LIMIT 1
+");
+$stmt->execute([$id, $student_id, $student_id]);
 $lesson = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($lesson && $lesson['time']) {
     $lesson['time'] = convertTimeForResponse($lesson['time'], $timezone);
 }
+
 echo json_encode($lesson);
 
 function convertTimeForResponse($timeStr, $targetTimezone) {
