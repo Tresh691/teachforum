@@ -161,6 +161,7 @@ function getDayWord($n) {
             <a class="sidebar__link active" data-tab="students">👥 Ученики</a>
             <a class="sidebar__link" data-tab="schedule">📅 Моё расписание</a>
             <a class="sidebar__link" data-tab="homeworks">📝 Домашние задания</a>
+            <a class="sidebar__link" data-tab="statistics">📊 Статистика</a>
 
             <?php if ($currentPlan !== 'basic'): ?>
                 <a class="sidebar__link" data-tab="library">📖 Библиотека заданий</a>
@@ -192,7 +193,7 @@ function getDayWord($n) {
     let TEACHER_TIMEZONE = <?= json_encode($_SESSION['user']['timezone'] ?? 'Europe/Moscow') ?>;
     window.__ONBOARDING_COMPLETED__ = <?= json_encode((bool)$onboardingCompleted) ?>;
     </script>
-    <script src="js/teacher20.js"></script>
+    <script src="js/teacher21.js"></script>
     <script>
     loadCustomBlocks();
     applyHiddenSections();

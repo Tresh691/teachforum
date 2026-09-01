@@ -113,6 +113,7 @@ $studentTimezone = $stmt->fetchColumn() ?: 'Europe/Moscow';
             <a class="sidebar__link active" data-tab="schedule">📅 Расписание</a>
             <a class="sidebar__link" data-tab="homeworks">📝 Домашние задания</a>
             <a class="sidebar__link" data-tab="lectures">📚 Лекции</a>
+            <a class="sidebar__link" data-tab="statistics">📊 Статистика</a>
             <div id="customBlocksContainer"></div>
         </nav>
         <div class="sidebar__logout">
@@ -128,7 +129,7 @@ $studentTimezone = $stmt->fetchColumn() ?: 'Europe/Moscow';
         const SIDEBAR_CUSTOMIZATION = <?= $sidebarCustomJson ?>;
         let STUDENT_TIMEZONE = <?= json_encode($studentTimezone) ?>;
     </script>
-    <script src="js/student11.js"></script>
+    <script src="js/student12.js"></script>
     <script>
         // Применяем скрытие разделов и кастомизацию после загрузки кастомных блоков
         document.addEventListener('DOMContentLoaded', function() {
