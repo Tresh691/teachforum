@@ -20,21 +20,22 @@ if (!$stmt->fetch()) {
     exit;
 }
 
-// Считаем уроки за выбранный месяц
+// Считаем индивидуальные статусы по lesson_students
 $stmt = $pdo->prepare("
     SELECT 
         COUNT(*) AS total,
-        SUM(CASE WHEN payment_status = 'paid' THEN 1 ELSE 0 END) AS paid,
-        SUM(CASE WHEN payment_status = 'unpaid' THEN 1 ELSE 0 END) AS unpaid,
-        SUM(CASE WHEN payment_status = 'pending' THEN 1 ELSE 0 END) AS pending,
-        SUM(CASE WHEN payment_status = 'none' THEN 1 ELSE 0 END) AS none
-    FROM lessons
-    WHERE student_id = ? 
-      AND teacher_id = ?
-      AND YEAR(lesson_date) = ? 
-      AND MONTH(lesson_date) = ?
+        SUM(CASE WHEN ls.payment_status = 'paid' THEN 1 ELSE 0 END) AS paid,
+        SUM(CASE WHEN ls.payment_status = 'unpaid' THEN 1 ELSE 0 END) AS unpaid,
+        SUM(CASE WHEN ls.payment_status = 'pending' THEN 1 ELSE 0 END) AS pending,
+        SUM(CASE WHEN ls.payment_status = 'none' THEN 1 ELSE 0 END) AS none
+    FROM lessons l
+    JOIN lesson_students ls ON l.id = ls.lesson_id
+    WHERE l.teacher_id = ?
+      AND ls.student_id = ?
+      AND YEAR(l.lesson_date) = ?
+      AND MONTH(l.lesson_date) = ?
 ");
-$stmt->execute([$student_id, $teacher_id, $year, $month]);
+$stmt->execute([$teacher_id, $student_id, $year, $month]);
 $stats = $stmt->fetch(PDO::FETCH_ASSOC);
 
 echo json_encode($stats ?: ['total' => 0, 'paid' => 0, 'unpaid' => 0, 'pending' => 0, 'none' => 0]);
