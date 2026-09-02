@@ -1242,9 +1242,10 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
             <tr>
                 <td>${t.exam_name}</td>
                 <td>${t.exam_date||"—"}</td>
+                <td>${t.comment||""}</td>
                 <td>${t.score}</td>
                 <td>
-                    <button class="btn-icon" onclick="openEditExamModal(${t.id}, ${e}, '${t.exam_name.replace(/'/g,"\\'")}', '${(t.subject||"").replace(/'/g,"\\'")}', '${t.exam_date||""}', ${t.score})">✏️</button>
+                    <button class="btn-icon" onclick="openEditExamModal(${t.id}, ${e}, '${t.exam_name.replace(/'/g,"\\'")}', '${(t.subject||"").replace(/'/g,"\\'")}', '${t.exam_date||""}', ${t.score}, '${(t.comment||"").replace(/'/g,"\\'")}')">✏️</button>
                     <button class="btn-icon" onclick="deleteExamResult(${t.id}, ${e})">🗑️</button>
                 </td>
             </tr>`}),document.getElementById("statisticsContent").innerHTML=`
@@ -1255,7 +1256,7 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
         </div>
         <div class="table-responsive">
             <table>
-                <thead><tr><th>Название</th><th>Дата</th><th>Баллы</th><th></th></tr></thead>
+                <thead><tr><th>Название</th><th>Дата</th><th>Комментарий</th><th>Баллы</th><th></th></tr></thead>
                 <tbody>${n}</tbody>
             </table>
         </div>
@@ -1268,15 +1269,17 @@ function renderStudents(){fetch("get_students.php").then(e=>e.json()).then(e=>{l
             <div class="form-group"><label class="form-label">Название</label><input type="text" id="examName" class="form-input"></div>
             <div class="form-group"><label class="form-label">Предмет</label><input type="text" id="examSubject" class="form-input"></div>
             <div class="form-group"><label class="form-label">Дата</label><input type="date" id="examDate" class="form-input"></div>
+            <div class="form-group"><label class="form-label">Комментарий</label><textarea id="examComment" class="form-input" rows="3"></textarea></div>
             <div class="form-group"><label class="form-label">Баллы</label><input type="number" id="examScore" class="form-input" min="0"></div>
             <button class="btn btn--primary" onclick="addExamResult(${e})">Сохранить</button>
-        </div>`,document.body.appendChild(t)}function addExamResult(e){let t=document.getElementById("examName").value.trim(),l=document.getElementById("examSubject").value.trim(),o=document.getElementById("examDate").value,a=document.getElementById("examScore").value;if(!t)return alert("Введите название");fetch("add_exam_result.php",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`student_id=${e}&exam_name=${encodeURIComponent(t)}&subject=${encodeURIComponent(l)}&exam_date=${o}&score=${a}`}).then(e=>e.json()).then(t=>{t.success?(document.querySelector(".modal-overlay").remove(),loadExamResultsForStudent(e,"")):alert(t.error)})}function openEditExamModal(e,t,l,o,a,n){let s=document.createElement("div");s.className="modal-overlay active",s.innerHTML=`
+        </div>`,document.body.appendChild(t)}function addExamResult(e){let t=document.getElementById("examName").value.trim(),l=document.getElementById("examSubject").value.trim(),o=document.getElementById("examDate").value,a=document.getElementById("examComment").value.trim(),n=document.getElementById("examScore").value;if(!t)return alert("Введите название");fetch("add_exam_result.php",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`student_id=${e}&exam_name=${encodeURIComponent(t)}&subject=${encodeURIComponent(l)}&exam_date=${o}&comment=${encodeURIComponent(a)}&score=${n}`}).then(e=>e.json()).then(t=>{t.success?(document.querySelector(".modal-overlay").remove(),loadExamResultsForStudent(e,"")):alert(t.error)})}function openEditExamModal(e,t,l,o,a,n,s=""){let i=document.createElement("div");i.className="modal-overlay active",i.innerHTML=`
         <div class="modal">
             <button class="modal__close" onclick="this.closest('.modal-overlay').remove()">&times;</button>
             <h3>Редактировать пробник</h3>
             <div class="form-group"><label class="form-label">Название</label><input type="text" id="examName" class="form-input" value="${l}"></div>
             <div class="form-group"><label class="form-label">Предмет</label><input type="text" id="examSubject" class="form-input" value="${o}"></div>
             <div class="form-group"><label class="form-label">Дата</label><input type="date" id="examDate" class="form-input" value="${a}"></div>
+            <div class="form-group"><label class="form-label">Комментарий</label><textarea id="examComment" class="form-input" rows="3">${s}</textarea></div>
             <div class="form-group"><label class="form-label">Баллы</label><input type="number" id="examScore" class="form-input" min="0" value="${n}"></div>
             <button class="btn btn--primary" onclick="updateExamResult(${e}, ${t})">Сохранить</button>
-        </div>`,document.body.appendChild(s)}function updateExamResult(e,t){let l=document.getElementById("examName").value.trim(),o=document.getElementById("examSubject").value.trim(),a=document.getElementById("examDate").value,n=document.getElementById("examScore").value;if(!l)return alert("Введите название");fetch("update_exam_result.php",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`id=${e}&exam_name=${encodeURIComponent(l)}&subject=${encodeURIComponent(o)}&exam_date=${a}&score=${n}`}).then(e=>e.json()).then(e=>{e.success?(document.querySelector(".modal-overlay").remove(),loadExamResultsForStudent(t,"")):alert(e.error)})}function deleteExamResult(e,t){confirm("Удалить пробник?")&&fetch("delete_exam_result.php",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`id=${e}`}).then(e=>e.json()).then(e=>{e.success?loadExamResultsForStudent(t,""):alert(e.error)})}
+        </div>`,document.body.appendChild(i)}function updateExamResult(e,t){let l=document.getElementById("examName").value.trim(),o=document.getElementById("examSubject").value.trim(),a=document.getElementById("examDate").value,n=document.getElementById("examComment").value.trim(),s=document.getElementById("examScore").value;if(!l)return alert("Введите название");fetch("update_exam_result.php",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`id=${e}&exam_name=${encodeURIComponent(l)}&subject=${encodeURIComponent(o)}&exam_date=${a}&comment=${encodeURIComponent(n)}&score=${s}`}).then(e=>e.json()).then(e=>{e.success?(document.querySelector(".modal-overlay").remove(),loadExamResultsForStudent(t,"")):alert(e.error)})}function deleteExamResult(e,t){confirm("Удалить пробник?")&&fetch("delete_exam_result.php",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`id=${e}`}).then(e=>e.json()).then(e=>{e.success?loadExamResultsForStudent(t,""):alert(e.error)})}

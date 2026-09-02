@@ -13,6 +13,7 @@ $exam_name = trim($_POST['exam_name'] ?? '');
 $subject = trim($_POST['subject'] ?? '');
 $exam_date = $_POST['exam_date'] ?? null;
 $score = (int)($_POST['score'] ?? 0);
+$comment = trim($_POST['comment'] ?? '');
 
 if ($id <= 0 || $exam_name === '') {
     echo json_encode(['success' => false, 'error' => 'Неверные данные']);
@@ -27,7 +28,7 @@ if (!$stmt->fetch()) {
     exit;
 }
 
-$stmt = $pdo->prepare("UPDATE exam_results SET exam_name = ?, subject = ?, exam_date = ?, score = ? WHERE id = ? AND teacher_id = ?");
-$stmt->execute([$exam_name, $subject ?: null, $exam_date ?: null, $score, $id, $teacher_id]);
+$stmt = $pdo->prepare("UPDATE exam_results SET exam_name = ?, subject = ?, exam_date = ?, score = ?, comment = ? WHERE id = ? AND teacher_id = ?");
+$stmt->execute([$exam_name, $subject ?: null, $exam_date ?: null, $score, $comment ?: null, $id, $teacher_id]);
 
 echo json_encode(['success' => true]);

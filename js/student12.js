@@ -183,12 +183,12 @@ function loadStudentSchedule(){let e=new Date;renderStudentCalendar(e.getFullYea
                 <select id="studentTimezone" class="form-select">${t}</select>
             </div>
             <button class="btn btn--primary" onclick="saveStudentTimezone()">Сохранить</button>
-        </div>`,document.body.appendChild(a)}function saveStudentTimezone(){let e=document.getElementById("studentTimezone");if(!e)return;let t=e.value;fetch("update_student_timezone.php",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`timezone=${encodeURIComponent(t)}`}).then(e=>e.json()).then(e=>{if(e.success){if(document.querySelector(".modal-overlay").remove(),STUDENT_TIMEZONE=t,alert("Часовой пояс сохранён. Время уроков пересчитано."),window.currentStudentLessonData){let{lessonId:a}=window.currentStudentLessonData;viewLesson(a)}{let l=new Date;renderStudentCalendar(l.getFullYear(),l.getMonth()+1)}}else alert("Ошибка: "+e.error)}).catch(()=>alert("Ошибка сети"))}function loadStudentStatistics(){fetch("student_get_exam_results.php").then(e=>e.json()).then(e=>{let t=e.length?(e.reduce((e,t)=>e+Number(t.score),0)/e.length).toFixed(1):"—",a="";e.forEach(e=>{a+=`<tr><td>${e.exam_name}</td><td>${e.exam_date||"—"}</td><td>${e.score}</td></tr>`}),document.getElementById("mainContent").innerHTML=`
+        </div>`,document.body.appendChild(a)}function saveStudentTimezone(){let e=document.getElementById("studentTimezone");if(!e)return;let t=e.value;fetch("update_student_timezone.php",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:`timezone=${encodeURIComponent(t)}`}).then(e=>e.json()).then(e=>{if(e.success){if(document.querySelector(".modal-overlay").remove(),STUDENT_TIMEZONE=t,alert("Часовой пояс сохранён. Время уроков пересчитано."),window.currentStudentLessonData){let{lessonId:a}=window.currentStudentLessonData;viewLesson(a)}{let l=new Date;renderStudentCalendar(l.getFullYear(),l.getMonth()+1)}}else alert("Ошибка: "+e.error)}).catch(()=>alert("Ошибка сети"))}function loadStudentStatistics(){fetch("student_get_exam_results.php").then(e=>e.json()).then(e=>{let t=e.length?(e.reduce((e,t)=>e+Number(t.score),0)/e.length).toFixed(1):"—",a="";e.forEach(e=>{a+=`<tr><td>${e.exam_name}</td><td>${e.exam_date||"—"}</td><td>${e.comment||""}</td><td>${e.score}</td></tr>`}),document.getElementById("mainContent").innerHTML=`
                 <h2>Пробники</h2>
                 <div class="table-responsive">
                     <table>
-                        <thead><tr><th>Название</th><th>Дата</th><th>Баллы</th></tr></thead>
-                        <tbody>${a||'<tr><td colspan="3">Нет пробников</td></tr>'}</tbody>
+                        <thead><tr><th>Название</th><th>Дата</th><th>Комментарий</th><th>Баллы</th></tr></thead>
+                        <tbody>${a||'<tr><td colspan="4">Нет пробников</td></tr>'}</tbody>
                     </table>
                 </div>
                 <div class="stats-panel" style="margin-top:16px;">

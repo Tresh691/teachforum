@@ -13,6 +13,7 @@ $exam_name = trim($_POST['exam_name'] ?? '');
 $subject = trim($_POST['subject'] ?? '');
 $exam_date = $_POST['exam_date'] ?? null;
 $score = (int)($_POST['score'] ?? 0);
+$comment = trim($_POST['comment'] ?? '');
 
 if ($student_id <= 0 || $exam_name === '') {
     echo json_encode(['success' => false, 'error' => 'Обязательные поля не заполнены']);
@@ -27,7 +28,7 @@ if (!$stmt->fetch()) {
     exit;
 }
 
-$stmt = $pdo->prepare("INSERT INTO exam_results (teacher_id, student_id, exam_name, subject, exam_date, score) VALUES (?, ?, ?, ?, ?, ?)");
-$stmt->execute([$teacher_id, $student_id, $exam_name, $subject ?: null, $exam_date ?: null, $score]);
+$stmt = $pdo->prepare("INSERT INTO exam_results (teacher_id, student_id, exam_name, subject, exam_date, score, comment) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$stmt->execute([$teacher_id, $student_id, $exam_name, $subject ?: null, $exam_date ?: null, $score, $comment ?: null]);
 
 echo json_encode(['success' => true, 'exam_id' => $pdo->lastInsertId()]);
